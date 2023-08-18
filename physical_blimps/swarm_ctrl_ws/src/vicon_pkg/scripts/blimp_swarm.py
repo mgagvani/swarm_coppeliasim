@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
-from pyBlimp.blimp import BlimpManager
-from pyBlimp.utils import read_config
-from physical_blimps.swarm_ctrl_ws.src.vicon_pkg.scripts.vicon import Vicon
-from physical_blimps.CONFIG import *
+import sys
+# print(sys.version)
+sys.path.append("../../../../src/pyBlimp")
+sys.path.append("/home/navupa/code/swarm_coppeliasim/physical_blimps")
+sys.path.append("/home/navupa/code/swarm_coppeliasim/physical_blimps/src/pyBlimp")
+# for item in sys.path:
+#     print("PATH: ", item)
+from src.pyBlimp.blimp import BlimpManager
+from src.pyBlimp.utils import read_config
+# from pyBlimp.blimp import BlimpManager
+# from pyBlimp.utils import read_config
+from vicon import Vicon
+from CONFIG import *
 import numpy as np
 import time
 
@@ -29,12 +38,13 @@ class viconBlimps(BlimpManager):
             this should be specified in CONFIG.py, and not really necessary to change
         @param logger: hardly know her
         """
-        cfg = read_config(cfg_paths)
-        self.num_blimps = len(cfg_paths)
-        super().__init__(cfg=cfg, port=port, logger=logger)
-        self.vicon = vicon
-        self.change_command_type(command_type)
-        self.reset_agent_goals()
+        print("In __init__ of viconBlimps, port is: ", port)
+        cfg = read_config(cfg_paths); print("read config", cfg)
+        self.num_blimps = len(cfg_paths); print(f"there are {self.num_blimps} blimps")
+        super().__init__(cfg=cfg, port=port, logger=logger); print('blimpmanager init')
+        self.vicon = vicon; print("vicon assign")
+        self.change_command_type(command_type); print('command type')
+        self.reset_agent_goals(); print("reset goals")
 
     ####################################################################################################################
     # init/shutdown functions
@@ -349,9 +359,14 @@ class PhysicalExperiment(viconBlimps):
 
 
 if __name__ == "__main__":
-    test = PhysicalExperiment(cfg_paths=[create_config_file(2)], vicon=Vicon(['b2/b2']), command_type='force')
+    print("Starting script...")
+    cfg_pth = "/home/navupa/code/swarm_coppeliasim/physical_blimps/configs/config1.yaml"
+    helmet = Vicon(['helmet/helmet']) # temp
+    test = PhysicalExperiment(cfg_paths=[cfg_pth], vicon=helmet, command_type='force')
+    print('DEBUG ', test._blimps)
     while True:
-        test.move_agent(0, np.array((0, 0, -1)))
         print(test.get_velocity(0), test.get_acc(0))
+        test.move_agent(0, np.array((0, 0, -1)))
         time.sleep(.1)
     test.set_up_agents([np.array((0., 0., 1.))])
+    

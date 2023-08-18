@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import numpy as np
 import signal
@@ -17,7 +18,7 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, exit_handle)
 
     # load desired configs
-    cfg_paths = ["configs/config2.yaml"]
+    cfg_paths = ["/home/navupa/code/swarm_coppeliasim/physical_blimps/configs/config1.yaml"]
     cfg = read_config(cfg_paths)
 
     # build the blimp object

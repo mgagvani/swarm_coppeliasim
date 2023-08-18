@@ -9,6 +9,7 @@ class JoyStick_helper:
         pygame.display.init()
         pygame.joystick.init()
         self.js = pygame.joystick.Joystick(js_id)
+        self.js.init()
         
         self.dead = 0.1
         self.button_state = False

@@ -16,7 +16,9 @@ class Vicon:
         """
         self.num_objects = len(topics)
         self.blimps = []
-        rospy.init_node('listener_hardly_know_her')
+        print("got here")
+        rospy.init_node('listener_hardly_know_her', anonymous=True)
+        print("got here here")
         for obj_id, local in enumerate(topics):
             this_blimp = dict()
             object_info = {
@@ -231,9 +233,10 @@ class Vicon:
 
 if __name__ == "__main__":
     if True:
-        x = Vicon(['/vicon/b2/b2'], '')
+        x = Vicon(['helmet/helmet'])
+        print(x.topics)
         while True:
-            time.sleep(.2)
+            time.sleep(.5)
             print()
             print('pos')
             print(x.get_object_pos(0))

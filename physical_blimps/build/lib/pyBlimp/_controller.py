@@ -88,7 +88,6 @@ class _Controller:
         self.pi = MultiRcv(cfg)
 
         # construct lowest-level PID controllers
-        self.positive_only = True
         k_r  = np.array(cfg['k_r'])
         k_p  = np.array(cfg['k_p'])
         k_yw = np.array(cfg['k_yw'])
@@ -293,11 +292,11 @@ class _Controller:
         # prioritize vertical thrust
         updown_abs = u[2]
         if abs(updown_abs) > 0.1:
-            u *= 0.1
+            u[2] *= 0.1
 
         # clip extraneous input
         u[2] = updown_abs
-        if self.positive_only: u[2] = min(0, u[2])
+        if self.positive_only: u[2] = min(u[2], 0)
         u = np.clip(u, -0.8, 0.8)
 
         # mix commands to get motor inputs
